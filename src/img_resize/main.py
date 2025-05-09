@@ -8,6 +8,4 @@ if __name__ == "__main__":
     gui = GUI(logic)
     
     
-    
-    
     gui.root.mainloop()
