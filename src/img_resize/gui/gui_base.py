@@ -28,7 +28,7 @@ class GUI:
         Set up all the UI elements on the window, including file selection 
         and image resolution buttons if a file is selected.
         """
-        self.create_button('choose_File', 'Choose File', lambda: self.choose_file(), 0.25, 20)
+        self.create_button('choose_File', 'Choose File', lambda: self.choose_file(), 0.5, 20)
 
         if hasattr(self, 'path') and self.path != 'path':
             self.create_button('create_Thumbnail', 'Create Thumbnail', 
@@ -40,7 +40,7 @@ class GUI:
             self.create_button('create_8x', 'Create 8x', 
                                lambda: self.logic.increase_Resolution(self.path, 8), 0.75, 200)
         
-        self.create_label(self.filename_var, 0.25, 50)
+        self.create_label(self.filename_var, 0.5, 50)
 
     def create_button(self, name_Button: str, text: str, command: Callable[[], None], x: float, y: int) -> None:
         """
