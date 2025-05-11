@@ -33,6 +33,8 @@ class GUI:
         if hasattr(self, 'path') and self.path != 'path':
             self.create_button('create_Thumbnail', 'Create Thumbnail', 
                                lambda: self.logic.thumbnail_Resolution(self.path), 0.25, 100)
+            self.create_button('Remove Backgraound', 'Remove Background', 
+                               lambda: self.logic.remove_background(self.path), 0.25, 150)
             self.create_button('create_2x', 'Create 2x', 
                                lambda: self.logic.increase_Resolution(self.path, 2), 0.75, 100)
             self.create_button('create_4x', 'Create 4x', 

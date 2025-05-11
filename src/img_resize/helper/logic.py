@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from tkinter import filedialog
 from PIL import Image
+from rembg import remove
+import io
 
 class Logic:
     """
@@ -152,3 +154,31 @@ class Logic:
                 print(f"Thumbnail saved to {file_path}")
             else:
                 print("Save cancelled.")
+
+
+    def remove_background(self, path) -> None:
+        """
+        Removes the background from an image and saves the result using a file dialog.
+    
+        Args:
+            path (str): The path to the image file.
+        """
+        with open(path, 'rb') as f:
+            input_bytes = f.read()
+            output_bytes = remove(input_bytes)
+    
+        # Convert output bytes to PIL Image with transparency
+        img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
+    
+        # Save with dialog
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".png",
+            filetypes=[("PNG files", "*.png")],
+            title="Save Image without Background"
+        )
+        if file_path:
+            img.save(file_path, format="PNG")
+            print(f"Image saved to: {file_path}")
+        else:
+            print("Save cancelled.")
+    
