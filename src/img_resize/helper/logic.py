@@ -77,7 +77,7 @@ class Logic:
         Args:
             path (str): Path to the image file.
         """
-        self.resize_to_youtube_thumbnail(path)
+        self.resize_to_custom_resolution(path, 1280, 720)
 
 
     def save_cv2_image(self, img: np.ndarray):
@@ -112,7 +112,7 @@ class Logic:
         else:
             print("Save cancelled.")
 
-    def resize_to_youtube_thumbnail(self, input_path: str):
+    def resize_to_custom_resolution(self, input_path: str, target_width, target_height):
         """
         Resize and crop an image to fit YouTube thumbnail dimensions (1280x720),
         preserving aspect ratio and cropping the excess without stretching or padding.
@@ -121,7 +121,7 @@ class Logic:
         Args:
             input_path (str): Path to input image file.
         """
-        target_width, target_height = 1280, 720
+
         target_ratio = target_width / target_height
 
         with Image.open(input_path) as img:
