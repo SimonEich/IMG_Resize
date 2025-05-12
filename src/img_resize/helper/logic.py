@@ -159,17 +159,17 @@ class Logic:
     def remove_background(self, path) -> None:
         """
         Removes the background from an image and saves the result using a file dialog.
-    
+
         Args:
             path (str): The path to the image file.
         """
         with open(path, 'rb') as f:
             input_bytes = f.read()
             output_bytes = remove(input_bytes)
-    
+
         # Convert output bytes to PIL Image with transparency
         img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
-    
+
         # Save with dialog
         file_path = filedialog.asksaveasfilename(
             defaultextension=".png",
@@ -181,4 +181,78 @@ class Logic:
             print(f"Image saved to: {file_path}")
         else:
             print("Save cancelled.")
+            
+    def save_cv2_image(self, img: np.ndarray):
+        """
+        Open a file save dialog and save an OpenCV image as PNG if it has transparency (alpha),
+        otherwise allow both JPEG and PNG using PIL.
+
+        Args:
+            img (np.ndarray): The image (BGR or BGRA format).
+        """
+        has_alpha = img.shape[2] == 4 if len(img.shape) == 3 else False
+
+        # Only allow PNG if image has transparency
+        filetypes = [("PNG files", "*.png")] if has_alpha else [
+            ("JPEG files", "*.jpeg"),
+            ("PNG files", "*.png")
+        ]
+        def_ext = ".png" if has_alpha else ".jpeg"
+
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=def_ext,
+            filetypes=filetypes,
+            title="Save image file"
+        )
+
+        if file_path:
+            ext = file_path.lower().split('.')[-1]
+            format = "PNG" if has_alpha or ext == "png" else "JPEG"
+
+            # Convert BGR(A) to RGB(A)
+            if has_alpha:
+                img_rgb = cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
+            else:
+                img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+            img_pil = Image.fromarray(img_rgb)
+
+            if format == "JPEG":
+                img_pil = img_pil.convert("RGB")  # Ensure no alpha
+
+            img_pil.save(file_path, format=format)
+            print(f"Image saved to: {file_path}")
+        else:
+            print("Save cancelled.")
+
+    
+    def remove_white_pixels(self, path) -> None:
+        """
+        Remove white (or near-white) pixels from an image and save the result using a file dialog.
+    
+        Args:
+            path (str): The path to the image file.
+        """
+        tolerance = 10
+        img = Image.open(path).convert("RGBA")
+        datas = img.getdata()
+    
+        new_data = []
+        for r, g, b, a in datas:
+            if (
+                abs(r - 255) <= tolerance and
+                abs(g - 255) <= tolerance and
+                abs(b - 255) <= tolerance
+            ):
+                new_data.append((255, 255, 255, 0))  # Make transparent
+            else:
+                new_data.append((r, g, b, a))
+    
+        img.putdata(new_data)
+    
+        # Convert to NumPy array with BGRA format for OpenCV compatibility
+        img_np = np.array(img)
+        img_cv2 = cv2.cvtColor(img_np, cv2.COLOR_RGBA2BGRA)
+    
+        self.save_cv2_image(img_cv2)
     

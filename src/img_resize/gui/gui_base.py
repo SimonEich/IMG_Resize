@@ -35,6 +35,8 @@ class GUI:
                                lambda: self.logic.thumbnail_Resolution(self.path), 0.25, 100)
             self.create_button('Remove Backgraound', 'Remove Background', 
                                lambda: self.logic.remove_background(self.path), 0.25, 150)
+            self.create_button('remove_white', 'Remove White Pixels',
+                               lambda: self.logic.remove_white_pixels(self.path), 0.25, 200)
             self.create_button('create_2x', 'Create 2x', 
                                lambda: self.logic.increase_Resolution(self.path, 2), 0.75, 100)
             self.create_button('create_4x', 'Create 4x', 
@@ -55,7 +57,7 @@ class GUI:
             x: Relative horizontal position (0 to 1).
             y: Absolute vertical position in pixels.
         """
-        button = Button(self.root, text=text, width=12, font=("Arial", 14), command=command)
+        button = Button(self.root, text=text, width=14, font=("Arial", 14), command=command)
         button.place(relx=x, y=y, anchor="n")
         setattr(self, name_Button, button)
             
