@@ -32,7 +32,7 @@ class GUI:
 
         if hasattr(self, 'path') and self.path != 'path':
             self.create_button('create_Thumbnail', 'Create Thumbnail', 
-                               lambda: self.logic.thumbnail_Resolution(self.path, 1280, 720), 0.25, 100)
+                               lambda: self.logic.thumbnail_Resolution(self.path), 0.25, 100)
             self.create_button('Remove Backgraound', 'Remove Background', 
                                lambda: self.logic.remove_background(self.path), 0.25, 150)
             self.create_button('remove_white', 'Remove White Pixels',
@@ -44,7 +44,7 @@ class GUI:
             self.create_button('create_4x', 'Create 4x', 
                                lambda: self.logic.increase_Resolution(self.path, 4), 0.75, 150)
             self.create_button('create_8x', 'Create 8x', 
-                               lambda: self.logic.custom_resolution_screen(self.path), 0.75, 200)
+                               lambda: self.logic.increase_Resolution(self.path,8), 0.75, 200)
         
         self.create_label(self.filename_var, 0.5, 50)
         
